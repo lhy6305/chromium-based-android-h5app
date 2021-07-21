@@ -3,9 +3,9 @@
 This is an android app based on **chromium ContentShell apk**.   
 
 # build instruction
-Put your website files into folder [**assets/www**](ContentShell_project/assets/www)  
-It will automaticlly open [**assets/www/index.html**](ContentShell_project/assets/www/index.html) to display.  
+Put your website files into folder [**assets/www**](ContentShell_project/assets/www).  
 Then use [**apktools**](apktool) to edit the xml files and rebuild.  
+It will automaticlly open [**assets/www/index.html**](ContentShell_project/assets/www/index.html) to display.  
 
 # notice
 #### Due to github restrictions, I can only upload zipped files if they're too big. You should unzip the **7z** files first.  
@@ -17,7 +17,9 @@ Then use [**apktools**](apktool) to edit the xml files and rebuild.
 
 #### You can remove one of the folders in the [**lib**](ContentShell_project/lib) folder before rebuilding if you don't need them.  
 
-#### It will release the [**assets/www**](ContentShell_project/assets/www) folder to **/data/data/{packagename}/android_assets/www/** after every update or reinstall, so don't forget to change **versionCode** or/and **versionName** in the file [**AndroidManifest.xml**](ContentShell_project/AndroidManifest.xml) every update, or the files may not update.
+#### It will release the [**assets/www**](ContentShell_project/assets/www) folder to **/data/data/{packagename}/android_assets/www/** after every update or reinstall and create an empty file named **{versionName}{versionCode}** to prevent repeated release of files, so don't forget to change **versionCode (manifest->versionCode)** or/and **versionName (manifest->versionName)** in the file [**AndroidManifest.xml**](ContentShell_project/AndroidManifest.xml) every update, or the files may not update.  
+
+#### You can change the packageName (manifest->package) in the file [**AndroidManifest.xml**](ContentShell_project/AndroidManifest.xml) to whatever you like.
 
 # License  
 
