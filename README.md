@@ -19,7 +19,7 @@ You can remove one of the folders in the [**lib**](ContentShell_project/lib) fol
 
 It will release the [**assets/www**](ContentShell_project/assets/www) folder to **/data/data/{packagename}/android_assets/www/** after every update or reinstall and create an empty file named **{versionName}{versionCode}** to prevent repeated release of files, so don't forget to change **versionCode (manifest->versionCode)** or/and **versionName (manifest->versionName)** in the file [**AndroidManifest.xml**](ContentShell_project/AndroidManifest.xml) every update, or the files may not update.  
 
-You can change the packageName (manifest->package) in the file [**AndroidManifest.xml**](ContentShell_project/AndroidManifest.xml) to whatever you like.
+You can change the **packageName** (manifest->package) in the file [**AndroidManifest.xml**](ContentShell_project/AndroidManifest.xml) and the **appName** (manifest->application->android:label) to whatever you like.
 
 # License  
 
