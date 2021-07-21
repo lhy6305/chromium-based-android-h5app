@@ -24,3 +24,8 @@ You can change the packageName (manifest->package) in the file [**AndroidManifes
 # License  
 
 The part I modified is under the original license.  
+
+# project links  
+https://github.com/techexpertize/SignApk  
+https://ibotpeaches.github.io/Apktool  
+https://github.com/hzw1199/xml2axml  
