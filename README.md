@@ -30,6 +30,5 @@ If you come into trouble while trying to install your app, the probable reason i
 The part I modified is under the original license.  
 
 # used project links  
-https://github.com/techexpertize/SignApk  
 https://ibotpeaches.github.io/Apktool  
 https://github.com/hzw1199/xml2axml  
