@@ -21,6 +21,8 @@ It will release the [**assets/www**](ContentShell_project/assets/www) folder to 
 
 You can change the **packageName** (manifest->package) in the file [**AndroidManifest.xml**](ContentShell_project/AndroidManifest.xml) and the **appName** (manifest->application->android:label) to whatever you like.
 
+Don't forget to change the app-icon in the file(s) **res/mipmap-\*dpi-\*/app-icon**. They are in **png** format.
+
 # License  
 
 The part I modified is under the original license.  
