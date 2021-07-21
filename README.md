@@ -23,7 +23,7 @@ You can change the **packageName** (manifest->package) in the file [**AndroidMan
 
 Don't forget to change the app-icon in the file(s) **res/mipmap-\*dpi-\*/app-icon**. They are in **png** format.
 
-If you come into trouble while trying to install your app, the probable reason is the signature cannot be verified by your system. Try to change the **targetSdkVersion (manifest->uses-sdk->android:targetSdkVersion)** to a lower value or find a suitable signature method (jar,v2,v3,v4) for the **target sdk version** and rebuild.  
+If you come into trouble while trying to install your app, the probable reason is the signature cannot be verified by your system. Try to change the **targetSdkVersion (manifest->uses-sdk->android:targetSdkVersion)** to a lower value or find a suitable signature method (jar,v2,v3,v4) for the **target sdk version** and rebuild. (e.g. For target sdk version **30**, you should use **jar,v2 and v3**.) You can use the **apksigner** tool to automaticly decide and sign.  
 
 # License  
 
