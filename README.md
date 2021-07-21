@@ -14,6 +14,7 @@ Then use [**apktools**](apktool) to edit the xml files and rebuild.
 - [**lib/x86/libcontent_shell_content_view.7z**](ContentShell_project/lib/x86/libcontent_shell_content_view.7z.001)  
 
 The file **shell_view_\*.xml** can be placed into folder [**res/layout**](ContentShell_project/res/layout) to hide or show the default toolbar.  
+You can remove one of the folders in the [**lib**](ContentShell_project/lib) folder before rebuilding if you don't need them.  
 
 # License  
 
