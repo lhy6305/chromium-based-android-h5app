@@ -98,7 +98,7 @@ public class ContentShellActivity extends Activity {
 */
 
         copyAssetsWWW();
-        mStartupUrl = "file://" + getFilesDir().getParent() + "/android_assets/www/index.html";
+        mStartupUrl = "file://" + getFilesDir().getParent() + File.separator + "android_assets" + File.separator + "www" + File.separator + "index.html";
 
         if (CommandLine.getInstance().hasSwitch(RUN_WEB_TESTS_SWITCH)) {
             BrowserStartupController.getInstance().startBrowserProcessesSync(
@@ -260,18 +260,18 @@ public class ContentShellActivity extends Activity {
         try {
             PackageInfo pi = getPackageManager().getPackageInfo(getPackageName(), 0);
             vi = pi.versionName + pi.versionCode;
-            if(new File(getFilesDir().getParent() + "/android_assets/" + vi).exists()){
+            if(new File(getFilesDir().getParent() + File.separator + "android_assets" + File.separator + vi).exists()){
                 update = false;
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
         if (update) {
-            deleteAllFiles(new File(getFilesDir().getParent() + "/android_assets"));
-            copyAssets("www", getFilesDir().getParent() + "/android_assets/www");
+            deleteAllFiles(new File(getFilesDir().getParent() + File.separator + "android_assets"));
+            copyAssets("www", getFilesDir().getParent() + File.separator + "android_assets" + File.separator + "www");
             if(vi != null) {
                 try {
-                    new File(getFilesDir().getParent() + "/android_assets/" + vi).createNewFile();
+                    new File(getFilesDir().getParent() + File.separator + "android_assets" + File.separator + vi).createNewFile();
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -281,7 +281,7 @@ public class ContentShellActivity extends Activity {
 
     private void deleteAllFiles(File fil) {
         try {
-            Process process = Runtime.getRuntime().exec("rm -rf " + fil.getAbsolutePath());
+            Process process = Runtime.getRuntime().exec( "rm -rf " + fil.getAbsolutePath() );
             process.waitFor();
         } catch (Exception e) {
             e.printStackTrace();
@@ -308,8 +308,8 @@ public class ContentShellActivity extends Activity {
         for(int i = 0;; i++) {
             boolean flagc = false;
             int a = 0;
-            String fp = path + "/" + join("/", sfl);
-            if(fp.endsWith("/")){
+            String fp = path + File.separator + join(File.separator, sfl);
+            if(fp.endsWith(File.separator)){
                 fp = fp.substring(0, fp.length() - 1);
             }
             String[] fi;
@@ -334,11 +334,11 @@ public class ContentShellActivity extends Activity {
                 }else{
                     fl.add(a);
                 }
-                fp = path + "/" + join("/", sfl);
-                if(fp.endsWith("/")){
+                fp = path + File.separator + join(File.separator, sfl);
+                if(fp.endsWith(File.separator)){
                     fp = fp.substring(0, fp.length() - 1);
                 }
-                fp += "/" + fi[a];
+                fp += File.separator + fi[a];
                 if(sfl.size() >= i + 1) {
                     sfl.set(i, fi[a]);
                 }else{
@@ -364,11 +364,15 @@ public class ContentShellActivity extends Activity {
                     }
                 }
                 if(flag == 1) {
-                    lfl.add(join("/", sfl));
+                    if(!act.equals("copyAssets")) {
+                        lfl.add(join(File.separator, sfl));
+                    }else{
+                        new File(action[2] + File.separator + join(File.separator, sfl)).mkdirs();
+                    }
                     flagc = true;
                     break;
                 }else if(flag == 2) {
-                    lfl.add(join("/", sfl));
+                    lfl.add(join(File.separator, sfl));
                     sfl.remove(i);
                 }
             }
@@ -389,17 +393,17 @@ public class ContentShellActivity extends Activity {
         if(act.equals("deleteFiles")) {
             for (int b = lfl.size() - 1; b >= 0; b--) {
                 try {
-                    new File(path + "/" + lfl.get(b)).delete();
+                    new File(path + File.separator + lfl.get(b)).delete();
                     lfl.remove(b);
                 } catch (Exception ignored) {
                 }
             }
         }else if(act.equals("copyAssets")){
-            for (int b = 0; b < lfl.size(); b++) {
+            for (;lfl.size() > 0; lfl.remove(0)) {
                 try {
-                    File fil = new File(action[2] + "/" + lfl.get(b));
+                    File fil = new File(action[2] + File.separator + lfl.get(0));
                     fil.getParentFile().mkdirs();
-                    InputStream is = getAssets().open(path + "/" + lfl.get(b));
+                    InputStream is = getAssets().open(path + File.separator + lfl.get(0));
                     FileOutputStream fos = new FileOutputStream(fil);
                     byte[] buffer = new byte[1024];
                     int byteCount = 0;
@@ -409,7 +413,6 @@ public class ContentShellActivity extends Activity {
                     fos.flush();
                     is.close();
                     fos.close();
-                    lfl.remove(b);
                 } catch (Exception ignored) {
                 }
             }
