@@ -262,10 +262,10 @@ public class ContentShellActivity extends Activity {
             if(new File(getFilesDir().getParent() + "/android_assets/" + vi).exists()){
                 update = false;
             }
-        }catch (Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
-        if(update) {
+        if (update) {
             deleteAllFiles(new File(getFilesDir().getParent() + "/android_assets"));
             copyAssets("www", getFilesDir().getParent() + "/android_assets/www");
             if(vi != null) {
@@ -279,46 +279,152 @@ public class ContentShellActivity extends Activity {
     }
 
     private void deleteAllFiles(File fil) {
-        File[] files = fil.listFiles();
-        if (files == null)
-            return;
-        for (File f : files) {
-            if (f.isDirectory()) {
-                deleteAllFiles(f);
+        try {
+            Process process = Runtime.getRuntime().exec("rm -rf " + fil.getAbsolutePath());
+            process.waitFor();
+        } catch (Exception e) {
+            e.printStackTrace();
+            utils(fil, new String[]{"deleteFiles"});
+            fil.delete();
+        }
+    }
+
+    private void copyAssets(String oldPath, String newPath){
+        utils(null, new String[]{"copyAssets", oldPath, newPath});
+    }
+
+    private void utils(File cf, String[] action) {
+        String act = action[0];
+        String path;
+        if(!act.equals("copyAssets")) {
+            path = cf.getAbsolutePath();
+        }else {
+            path = action[1];
+        }
+        ArrayList<Integer> fl = new ArrayList<>();
+        ArrayList<String> sfl = new ArrayList<>();
+        ArrayList<String> lfl = new ArrayList<>();
+        for(int i = 0;; i++) {
+            boolean flagc = false;
+            int a = 0;
+            String fp = path + "/" + join("/", sfl);
+            if(fp.endsWith("/")){
+                fp = fp.substring(0, fp.length() - 1);
             }
-            if (f.exists()) {
+            String[] fi;
+            if(!act.equals("copyAssets")) {
+                cf = new File(fp);
+                fi = cf.list();
+            }else {
                 try {
-                    f.delete();
+                    fi = getAssets().list(fp);
                 } catch (Exception e) {
                     e.printStackTrace();
+                    return;
+                }
+            }
+            if(fl.size() >= i + 1) {
+                a = fl.get(i) + 1;
+            }
+            for(;a < fi.length; a++) {
+                int flag = 0;
+                if(fl.size() >= i + 1) {
+                    fl.set(i, a);
+                }else{
+                    fl.add(a);
+                }
+                fp = path + "/" + join("/", sfl);
+                if(fp.endsWith("/")){
+                    fp = fp.substring(0, fp.length() - 1);
+                }
+                fp += "/" + fi[a];
+                if(sfl.size() >= i + 1) {
+                    sfl.set(i, fi[a]);
+                }else{
+                    sfl.add(fi[a]);
+                }
+                if(!act.equals("copyAssets")) {
+                    cf = new File(fp);
+                    if (cf.isDirectory()) {
+                        flag = 1;
+                    } else if (cf.isFile()) {
+                        flag = 2;
+                    }
+                }else{
+                    try {
+                        if(getAssets().list(fp).length > 0){
+                            flag = 1;
+                        }else{
+                            flag = 2;
+                        }
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                        return;
+                    }
+                }
+                if(flag == 1) {
+                    lfl.add(join("/", sfl));
+                    flagc = true;
+                    break;
+                }else if(flag == 2) {
+                    lfl.add(join("/", sfl));
+                    sfl.remove(i);
+                }
+            }
+            if(flagc) {
+                continue;
+            }
+            try {
+                fl.remove(i);
+            }catch(Exception ignored) {
+            }
+            i--;
+            if(i < 0) {
+                break;
+            }
+            sfl.remove(i);
+            i--;
+        }
+        if(act.equals("deleteFiles")) {
+            for (int b = lfl.size() - 1; b >= 0; b--) {
+                try {
+                    new File(path + "/" + lfl.get(b)).delete();
+                    lfl.remove(b);
+                } catch (Exception ignored) {
+                }
+            }
+        }else if(act.equals("copyAssets")){
+            for (int b = 0; b < lfl.size(); b++) {
+                try {
+                    File fil = new File(action[2] + "/" + lfl.get(b));
+                    fil.getParentFile().mkdirs();
+                    InputStream is = getAssets().open(path + "/" + lfl.get(b));
+                    FileOutputStream fos = new FileOutputStream(fil);
+                    byte[] buffer = new byte[1024];
+                    int byteCount = 0;
+                    while ((byteCount = is.read(buffer)) != -1) {
+                        fos.write(buffer, 0, byteCount);
+                    }
+                    fos.flush();
+                    is.close();
+                    fos.close();
+                    lfl.remove(b);
+                } catch (Exception ignored) {
                 }
             }
         }
     }
 
-    private void copyAssets(String oldPath, String newPath) {
-        try {
-            String[] fileNames = getAssets().list(oldPath);
-            if (fileNames.length > 0) {
-                File file = new File(newPath);
-                file.mkdirs();
-                for (String fileName : fileNames) {
-                    copyAssets(oldPath + "/" + fileName, newPath + "/" + fileName);
-                }
-            } else {
-                InputStream is = getAssets().open(oldPath);
-                FileOutputStream fos = new FileOutputStream(new File(newPath));
-                byte[] buffer = new byte[1024];
-                int byteCount = 0;
-                while ((byteCount = is.read(buffer)) != -1) {
-                    fos.write(buffer, 0, byteCount);
-                }
-                fos.flush();
-                is.close();
-                fos.close();
+    private String join(String separator, ArrayList<String> input) {
+        if (input == null || input.size() <= 0) return "";
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < input.size(); i++) {
+            sb.append(input.get(i));
+            if (i != input.size() - 1) {
+                sb.append(separator);
             }
-        } catch (Exception e) {
-            e.printStackTrace();
         }
+        return sb.toString();
     }
+
 }
