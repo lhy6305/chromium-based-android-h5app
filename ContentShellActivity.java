@@ -52,7 +52,6 @@ public class ContentShellActivity extends Activity {
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        copyAssetsWWW();
 
         // Initializing the command line must occur before loading the library.
         if (!CommandLine.isInitialized()) {
@@ -98,6 +97,7 @@ public class ContentShellActivity extends Activity {
         }
 */
 
+        copyAssetsWWW();
         mStartupUrl = "file://" + getFilesDir().getParent() + File.separator + "android_assets" + File.separator + "www" + File.separator + "index.html";
 
         if (CommandLine.getInstance().hasSwitch(RUN_WEB_TESTS_SWITCH)) {
