@@ -28,6 +28,7 @@ import org.chromium.ui.base.IntentRequestTracker;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.InputStream;
+import java.util.ArrayList;
 
 /**
  * Activity for managing the Content Shell.
